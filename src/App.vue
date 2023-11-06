@@ -31,6 +31,19 @@
       v-if="!isPostsLoading"  
     />
     <div v-else>Идет загрузка...</div>
+    <div class="page_wrapper">
+      <div 
+        class="page" 
+        v-for="pageNumber in totalPages" 
+        :key="pageNumber"
+        :class="{
+          'current-page':page === pageNumber
+        }"
+        @click="changePage(pageNumber)"
+      >
+        {{pageNumber}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,6 +68,9 @@ export default{
         {value: 'body', name: 'По описанию'},
       ],
       searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0
     } 
     
   },
@@ -72,7 +88,13 @@ export default{
     async fetchPosts(){
       try{
         this.isPostsLoading = true
-        const responce = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const responce = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        })
+        this.totalPages = Math.ceil(responce.headers['x-total-count'] / this.limit)
         this.posts = responce.data
       }
       catch(e){
@@ -82,6 +104,9 @@ export default{
         this.isPostsLoading = false
       }
     },
+    changePage(pageNumber){
+      this.page = pageNumber
+    }
   },
   mounted(){
     this.fetchPosts()
@@ -96,7 +121,10 @@ export default{
     }
   },
   watch: {
-  }
+    page() {
+      this.fetchPosts()
+    }
+  },
 }
 </script>
 
@@ -115,5 +143,18 @@ body{
   margin: 15px 0px 15px 0px;
   display: flex;
   justify-content: space-between;
+}
+
+.page_wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid black;
+  padding: 10px;
+}
+.current-page {
+  border: 2px solid teal;
 }
 </style>
