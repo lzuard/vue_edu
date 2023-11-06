@@ -1,11 +1,18 @@
 <template>
   <div class="app">
-    <h2>Страница с постами</h2>
-    <my-button
-      @click="showDialog"
-      >
-      Создать пост
-    </my-button>
+    <h1>Страница с постами</h1>
+    <div class="app_btns">
+      <my-button
+        @click="showDialog"
+        >
+        Создать пост
+      </my-button>
+      <my-select 
+        v-model="selectedSort"
+        :options="sortedOptions">
+
+      </my-select>
+    </div>
     <my-dialog 
       v-model:show="dialogVisible"
     >
@@ -14,7 +21,7 @@
       />
     </my-dialog>
     <post-list 
-      :posts="posts"
+      :posts="sortedPosts"
       @remove="removePost"
       v-if="!isPostsLoading"  
     />
@@ -36,7 +43,12 @@ export default{
     return {
       posts: [],
       dialogVisible: false,
-      isPostsLoading: false
+      isPostsLoading: false,
+      selectedSort: '',
+      sortedOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По описанию'},
+      ]
     } 
     
   },
@@ -67,6 +79,14 @@ export default{
   },
   mounted(){
     this.fetchPosts()
+  },
+  computed:{
+    sortedPosts(){
+      return [...this.posts].sort((post1,post2) => 
+        post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+    }
+  },
+  watch: {
   }
 }
 </script>
@@ -82,4 +102,9 @@ body{
   margin: 15px;
 }
 
+.app_btns{
+  margin: 15px;
+  display: flex;
+  justify-content: space-between;
+}
 </style>
