@@ -4,7 +4,7 @@
         <div class="navbar__btns">
             <my-button 
             class="navbar__btns__item"
-            @click="$router.push('/blogs')"
+            @click="$router.push('/posts')"
             >Посты</my-button>
             <my-button 
             class="navbar__btns__item"
