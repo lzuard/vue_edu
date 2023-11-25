@@ -2,6 +2,7 @@ import Main from "@/pages/Main";
 import PostPage from "@/pages/PostPage"
 import About from "@/pages/About"
 import SinglePostPage from "@/pages/SinglePostPage"
+import WeatherForecast from "@/pages/WeatherForecast"
 
 import { createRouter, createWebHashHistory } from "vue-router";
 
@@ -21,6 +22,10 @@ const routes = [
     {
         path:'/posts/:id',
         component: SinglePostPage
+    },
+    {
+        path:'/weather/',
+        component: WeatherForecast
     }
 ]
 

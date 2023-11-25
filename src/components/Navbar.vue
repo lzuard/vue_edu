@@ -10,6 +10,10 @@
             class="navbar__btns__item"
             @click="$router.push('/about')"
             >О сайте</my-button>
+            <my-button 
+            class="navbar__btns__item"
+            @click="$router.push('/weather')"
+            > Погода</my-button>
         </div>
     </div>
 </template>
